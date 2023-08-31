@@ -5,6 +5,33 @@ from settings import *
 from utils.tile import Tile
 from model.player import Player
 from debug import debug
+import random
+
+def generate_map(width, height, wall_percentage):
+    map = [[0 for _ in range(width)] for _ in range(height)]
+    
+    for y in range(1, height - 1):
+        for x in range(1, width - 1):
+            if random.random() < wall_percentage:
+                map[y][x] = 395
+    
+    for y in range(height):
+        map[y][0] = 395
+        map[y][width - 1] = 395
+    
+    for x in range(width):
+        map[0][x] = 395
+        map[height - 1][x] = 395
+    
+    start_x = random.randint(1, width - 2)
+    start_y = random.randint(1, height - 2)
+    map[start_y][start_x] = "p"
+    
+    return map
+
+
+generated_map = generate_map(24, 24, 0.4)
+
 
 class Level:
     def __init__(self):
@@ -21,14 +48,15 @@ class Level:
 
     # cria o mapa
     def createMap(self):
+        print(generated_map)
         # passa pelas linhas
-        for rowIndex, row in enumerate(world_map):
+        for rowIndex, row in enumerate(generated_map):
             # passa pelas colunas
             for columnindex, column in enumerate(row):
                 x = columnindex * tileSize
                 y = rowIndex * tileSize
 
-                if column == 'x':
+                if column != 0:
                     # captura a posicao da tile
                     Tile((x, y), [self.visible_sprites, self.obstacle_sprites])
 

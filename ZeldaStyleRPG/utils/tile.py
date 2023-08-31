@@ -7,3 +7,6 @@ class Tile(pygame.sprite.Sprite):
         self.image = pygame.image.load(r'ZeldaStyleRPG\graphics\levelGraphics\test\rock.png').convert_alpha()
         # recebe a posicao do tile
         self.rect = self.image.get_rect(topleft = position)
+
+        # cria o hitbox
+        self.hitbox = self.rect.inflate(0, -10)

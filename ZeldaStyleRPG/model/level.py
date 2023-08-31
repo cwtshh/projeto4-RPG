@@ -30,7 +30,7 @@ def generate_map(width, height, wall_percentage):
     return map
 
 
-generated_map = generate_map(24, 24, 0.4)
+generated_map = generate_map(24, 24, 0.1)
 
 
 class Level:

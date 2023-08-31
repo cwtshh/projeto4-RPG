@@ -34,8 +34,6 @@ class Level:
             'objects': importFolder(r'projeto4-RPG\ZeldaStyleRPG\graphics\levelGraphics\objects')
         }
 
-        print(graphics)
-
         for style, layout in layouts.items():
             for rowIndex, row in enumerate(layout):
                 for columnIndex, column in enumerate(row):

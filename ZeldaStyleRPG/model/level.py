@@ -7,6 +7,8 @@ from utils.tile import Tile
 from model.player import Player
 from debug import debug
 from utils.support import *
+from model.weapon import Weapon
+from UI.ui import UI
 
 class Level:
     def __init__(self):
@@ -18,8 +20,14 @@ class Level:
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
 
+        # sprites de ataque
+        self.current_attack = None
+
         # configuracoes do mapa
         self.createMap()
+
+        # interface de usuario
+        self.ui = UI()
 
     # cria o mapa
     def createMap(self):
@@ -52,16 +60,24 @@ class Level:
                             surface = graphics['objects'][int(column)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', surface)
         
-        self.player = Player((2000, 1500), [self.visible_sprites], self.obstacle_sprites)
+        self.player = Player((2000, 1500), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
 
 
 
+    def create_attack(self):
+        self.current_attack = Weapon(self.player, [self.visible_sprites])
 
+    def destroy_attack(self):
+        if self.current_attack:
+            self.current_attack.kill()
 
+        self.current_attack = None
+    
     def run(self):
         #atualiza e desenha os sprites
         self.visible_sprites.customDraw(self.player)
         self.visible_sprites.update()
+        self.ui.display(self.player)
 
 
 class YSortCameraGroup(pygame.sprite.Group):

@@ -41,4 +41,5 @@ magic_data = {
     'flame': {'strenght': 5, 'cost': 20, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\flame\\fire.png'},
     'heal': {'strenght': 20, 'cost': 10, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\heal\\heal.png'}
 }
+#
 

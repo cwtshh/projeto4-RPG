@@ -36,3 +36,9 @@ weapon_data = {
     'sai': {'cooldown': 80, 'damage': 10, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\weapons\\sai\\full.png'},
 }
 
+# magica
+magic_data = {
+    'flame': {'strenght': 5, 'cost': 20, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\flame\\fire.png'},
+    'heal': {'strenght': 20, 'cost': 10, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\heal\\heal.png'}
+}
+

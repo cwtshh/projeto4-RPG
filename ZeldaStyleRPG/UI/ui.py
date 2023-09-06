@@ -33,6 +33,11 @@ class UI:
             weapon = pygame.image.load(path).convert_alpha()
             self.weaponGraphics.append(weapon)
 
+        self.magicGraphics = []
+        for magic in magic_data.values():
+            path = magic['graphic']
+            magic = pygame.image.load(path).convert_alpha()
+            self.magicGraphics.append(magic)
 
     def showExp(self, exp):
         text_surface = self.font.render("XP: " + str(int(exp)), False, TEXT_COLOR)
@@ -61,6 +66,13 @@ class UI:
 
         self.displaySurface.blit(weapon_surf, weapon_rect)
 
+    def magicOverlay(self, magicIndex, has_switched):
+        bg_rect = self.selection_box(80, 635, has_switched)
+        magic_surf = self.magicGraphics[magicIndex]
+        magic_rect = magic_surf.get_rect(center = bg_rect.center)
+
+        self.displaySurface.blit(magic_surf, magic_rect)
+
 
 
 
@@ -72,5 +84,5 @@ class UI:
         self.showExp(player.exp)
 
         #self.selection_box(10, 600, player.canSwitchWeapon)
-        self.weaponOverlay(player.weapon_index, player.canSwitchWeapon)
-        #self.selection_box(85, 635)
+        self.weaponOverlay(player.weapon_index,not player.canSwitchWeapon)
+        self.magicOverlay(player.magic_index, not player.canSwitchMagic)

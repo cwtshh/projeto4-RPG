@@ -5,7 +5,7 @@ from settings import *
 class Player(pygame.sprite.Sprite):
     def __init__(self, position, groups, obstacleSprites, createAttack, destroyAttack, createMagic):
         super().__init__(groups)
-        self.image = pygame.image.load(r'ZeldaStyleRPG\graphics\levelGraphics\test\player.png').convert_alpha()
+        self.image = pygame.image.load(r'projeto4-RPG\ZeldaStyleRPG\graphics\levelGraphics\test\player.png').convert_alpha()
 
         # recebe a posicao do tile
         self.rect = self.image.get_rect(topleft = position)

@@ -41,5 +41,9 @@ magic_data = {
     'flame': {'strenght': 5, 'cost': 20, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\flame\\fire.png'},
     'heal': {'strenght': 20, 'cost': 10, 'graphic': 'projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\heal\\heal.png'}
 }
-#
 
+# enemy
+monster_data = {
+    'squid': {'health': , 'exp': 100, 'damage': 20,'attack_type': 'slash', 'attack_sound': 'projeto4\\ZeldaStyleRPG\\audio\\attack\\slash.wav', 'speed': , 'resistence': , 'attack_radius': , 'notice_radius':  },
+    'raccoon': {'health': , 'exp': , 'damage': ,'attack_type': , 'attack_sound': , 'speed': , 'resistence': , 'attack_radius': , 'notice_radius':  },
+}

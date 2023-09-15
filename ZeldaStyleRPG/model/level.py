@@ -23,6 +23,8 @@ class Level:
 
         # sprites de ataque
         self.current_attack = None
+        self.attackSprites = pygame.sprite.Group()
+        self.attackableSprites = pygame.sprite.Group()
 
         # configuracoes do mapa
         self.createMap()
@@ -56,7 +58,12 @@ class Level:
 
                         if style == 'grass':
                             randomGrassImage = choice(graphics['grass'])
-                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'visible', randomGrassImage)
+                            Tile((x, y), 
+                                 [self.visible_sprites, 
+                                  self.obstacle_sprites, 
+                                  self.attackableSprites], 
+                                  'grass', 
+                                  randomGrassImage)
 
                         if style == 'object':
                             surface = graphics['objects'][int(column)]
@@ -82,14 +89,15 @@ class Level:
 
                                 else: monster_name = 'squid'
 
-                                Enemy(monster_name, (x, y), [self.visible_sprites], self.obstacle_sprites)
+                                Enemy(monster_name, 
+                                      (x, y), 
+                                      [self.visible_sprites, 
+                                       self.attackableSprites], 
+                                       self.obstacle_sprites,
+                                       self.damagePlayer)
         
-        
-
-
-
     def create_attack(self):
-        self.current_attack = Weapon(self.player, [self.visible_sprites])
+        self.current_attack = Weapon(self.player, [self.visible_sprites, self.attackSprites])
 
     def create_magic(self, style, strength, cost):
         print(style)
@@ -102,11 +110,34 @@ class Level:
 
         self.current_attack = None
     
+    def playerAttackLogic(self):
+        if self.attackSprites:
+            for attackSprite in self.attackSprites:
+                collisionSprites = pygame.sprite.spritecollide(attackSprite, self.attackableSprites, False)
+
+                if collisionSprites:
+                    for targetSprite in collisionSprites:
+                        if targetSprite.spriteType == 'grass':
+                            targetSprite.kill()
+
+                        else:
+                            targetSprite.getDamage(self.player, attackSprite.spriteType)
+
+    
+    def damagePlayer(self, ammout, attackType):
+        if self.player.vulnerable:
+            self.player.health -= ammout
+            self.player.vulnerable = False
+            self.player.hurtTime = pygame.time.get_ticks()
+
+            # spwan de sangue
+    
     def run(self):
         #atualiza e desenha os sprites
         self.visible_sprites.customDraw(self.player)
         self.visible_sprites.update()
         self.visible_sprites.enemyUpdate(self.player)
+        self.playerAttackLogic()
         self.ui.display(self.player)
 
 

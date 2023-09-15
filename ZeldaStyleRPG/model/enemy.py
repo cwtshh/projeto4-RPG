@@ -5,7 +5,7 @@ from utils.support import importFolder
 
 
 class Enemy(Entity):
-    def __init__(self, monsterName, pos, groups, obstacleSprites):
+    def __init__(self, monsterName, pos, groups, obstacleSprites, damagePlayer):
 
         # geral
         super().__init__(groups)
@@ -38,6 +38,12 @@ class Enemy(Entity):
         self.canAttack = True
         self.attackTime = None
         self.attackCooldown = 400
+        self.damagePlayer = damagePlayer
+
+        # timer
+        self.vulnerable = True
+        self.hitTime = None
+        self.invencibilityDuration = 300
 
 
 
@@ -83,7 +89,7 @@ class Enemy(Entity):
     def actions(self, player):
         if self.status == 'attack':
             self.attackTime = pygame.time.get_ticks()
-            print('atacou')
+            self.damagePlayer(self.attackDamage, self.attackType)
 
         if self.status == 'move':
             self.direction = self.getPlayerDistanceDirection(player)[1]
@@ -105,17 +111,51 @@ class Enemy(Entity):
         self.image = animation[int(self.frameIndex)]
         self.rect = self.image.get_rect(center = self.hitbox.center)
 
-    def cooldown(self):
-        if not self.canAttack:
-            currentTime = pygame.time.get_ticks()
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
 
+        else:
+            self.image.set_alpha(255)
+
+    def cooldowns(self):
+        currentTime = pygame.time.get_ticks()
+        if not self.canAttack:
             if currentTime - self.attackTime >= self.attackCooldown:
                 self.canAttack = True
+
+        if not self.vulnerable:
+            if currentTime - self.hitTime >= self.invencibilityDuration:
+                self.vulnerable = True
+
+    def getDamage(self, player, attackType):
+        if self.vulnerable:
+            self.direction = self.getPlayerDistanceDirection(player)[1]
+
+            if attackType == 'weapon':
+                self.health -= player.getFullWeaponDamage()
+
+            else:
+                pass
+
+
+            self.hitTime = pygame.time.get_ticks()
+            self.vulnerable = False
+
+    def checkDeath(self):
+        if self.health <= 0:
+            self.kill()
+
+    def hitReaction(self):
+        if not self.vulnerable:
+            self.direction *= -self.resistance
     
     def update(self):
+        self.hitReaction()
         self.move(self.speed)
         self.animate()
-        self.cooldown()
+        self.cooldowns()
+        self.checkDeath()
 
     def enemyUpdate(self, player):
         self.getStatus(player)

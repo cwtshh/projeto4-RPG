@@ -9,6 +9,7 @@ from debug import debug
 from utils.support import *
 from model.weapon import Weapon
 from UI.ui import UI
+from model.enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -34,7 +35,8 @@ class Level:
         layouts = {
             'boundary': importCsvLayout(r'projeto4-RPG\ZeldaStyleRPG\map\map_FloorBlocks.csv'),
             'grass': importCsvLayout(r'projeto4-RPG\ZeldaStyleRPG\map\map_Grass.csv'),
-            'object': importCsvLayout(r'projeto4-RPG\ZeldaStyleRPG\map\map_Objects.csv')
+            'object': importCsvLayout(r'projeto4-RPG\ZeldaStyleRPG\map\map_Objects.csv'),
+            'entities': importCsvLayout(r'projeto4-RPG\ZeldaStyleRPG\map\map_Entities.csv')
         }
 
         graphics = {
@@ -59,8 +61,30 @@ class Level:
                         if style == 'object':
                             surface = graphics['objects'][int(column)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', surface)
+
+                        if style == 'entities':
+                            if column == '394':
+                                self.player = Player(
+                                    (x, y), 
+                                    [self.visible_sprites], 
+                                    self.obstacle_sprites, 
+                                    self.create_attack, 
+                                    self.destroy_attack, 
+                                    self.create_magic)
+                                
+                            else:
+
+                                if column == '390': monster_name = 'bamboo'
+
+                                elif column == '391' : monster_name = 'spirit'
+
+                                elif column == '392' : monster_name = 'raccoon'
+
+                                else: monster_name = 'squid'
+
+                                Enemy(monster_name, (x, y), [self.visible_sprites], self.obstacle_sprites)
         
-        self.player = Player((2000, 1500), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack, self.create_magic)
+        
 
 
 
@@ -82,6 +106,7 @@ class Level:
         #atualiza e desenha os sprites
         self.visible_sprites.customDraw(self.player)
         self.visible_sprites.update()
+        self.visible_sprites.enemyUpdate(self.player)
         self.ui.display(self.player)
 
 
@@ -115,3 +140,9 @@ class YSortCameraGroup(pygame.sprite.Group):
         for sprite in sorted(self.sprites(), key= lambda sprite: sprite.rect.centery):
             offset_position = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_position)
+
+    def enemyUpdate(self, player):
+        enemySprites = [sprite for sprite in self.sprites() if hasattr(sprite, 'spriteType') and sprite.spriteType == 'enemy']
+
+        for enemy in enemySprites:
+            enemy.enemyUpdate(player)

@@ -1,4 +1,4 @@
-from random import choice
+from random import choice, randint
 from typing import Iterable, Union
 import pygame
 from pygame.sprite import AbstractGroup
@@ -10,6 +10,7 @@ from utils.support import *
 from model.weapon import Weapon
 from UI.ui import UI
 from model.enemy import Enemy
+from model.particles import AnimationPlayer
 
 class Level:
     def __init__(self):
@@ -31,6 +32,9 @@ class Level:
 
         # interface de usuario
         self.ui = UI()
+
+        # particulas
+        self.animationPlayer = AnimationPlayer()
 
     # cria o mapa
     def createMap(self):
@@ -94,7 +98,8 @@ class Level:
                                       [self.visible_sprites, 
                                        self.attackableSprites], 
                                        self.obstacle_sprites,
-                                       self.damagePlayer)
+                                       self.damagePlayer,
+                                       self.triggerDeathParticles)
         
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attackSprites])
@@ -118,12 +123,19 @@ class Level:
                 if collisionSprites:
                     for targetSprite in collisionSprites:
                         if targetSprite.spriteType == 'grass':
+                            pos = targetSprite.rect.center
+                            offset = pygame.math.Vector2(0, 75)
+
+                            for leaf in range(randint(3, 6)):
+                                self.animationPlayer.createGrassParticles(pos - offset, [self.visible_sprites])
+
+
+                            self.animationPlayer.createGrassParticles(pos, [self.visible_sprites])
                             targetSprite.kill()
 
                         else:
                             targetSprite.getDamage(self.player, attackSprite.spriteType)
 
-    
     def damagePlayer(self, ammout, attackType):
         if self.player.vulnerable:
             self.player.health -= ammout
@@ -131,7 +143,12 @@ class Level:
             self.player.hurtTime = pygame.time.get_ticks()
 
             # spwan de sangue
-    
+            self.animationPlayer.createParticles(attackType, self.player.rect.center, [self.visible_sprites])
+
+    def triggerDeathParticles(self, position, particleType):
+        self.animationPlayer.createParticles(particleType, position, [self.visible_sprites])
+
+
     def run(self):
         #atualiza e desenha os sprites
         self.visible_sprites.customDraw(self.player)

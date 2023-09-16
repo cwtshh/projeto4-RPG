@@ -5,7 +5,7 @@ from utils.support import importFolder
 class AnimationPlayer:
     def __init__(self):
         self.frames = {
-            'flame': importFolder('projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\flame\\frames'),
+            'flame': importFolder('projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\flame\\frames\\'),
             'aura': importFolder('projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\aura'),
             'heal': importFolder('projeto4-RPG\\ZeldaStyleRPG\\graphics\\levelGraphics\\particles\\heal\\frames'),
 
@@ -63,6 +63,7 @@ class AnimationPlayer:
 class ParticleEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animationFrames, groups):
         super().__init__(groups)
+        self.spriteType = 'magic'
         self.frameIndex = 0
         self.animationSpeed = 0.15
         self.frames = animationFrames

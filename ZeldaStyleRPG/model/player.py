@@ -216,6 +216,13 @@ class Player(Entity):
         spellDamage = magic_data[self.magic]['strenght']
 
         return baseDamage + spellDamage
+    
+    def getValueByIndex(self, index):
+        return list(self.stats.values())[index]
+    
+    def getCostByIndex(self, index):
+        #return list(self.upgradeCost.values())[index]['cost']
+        return 1
 
     def energyRecovery(self):
         if self.energy < self.stats['energy']:

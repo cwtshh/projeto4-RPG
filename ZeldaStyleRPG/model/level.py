@@ -12,11 +12,13 @@ from UI.ui import UI
 from model.enemy import Enemy
 from model.particles import AnimationPlayer
 from model.magic import MagicPlayer
+from UI.upgrade import Upgrade
 
 class Level:
     def __init__(self):
         # recebe o display
         self.display_surface = pygame.display.get_surface()
+        self.gamePaused = False
 
 
         # inicia os sprites
@@ -33,6 +35,7 @@ class Level:
 
         # interface de usuario
         self.ui = UI()
+        self.upgrade = Upgrade(self.player)
 
         # particulas
         self.animationPlayer = AnimationPlayer()
@@ -101,7 +104,8 @@ class Level:
                                        self.attackableSprites], 
                                        self.obstacle_sprites,
                                        self.damagePlayer,
-                                       self.triggerDeathParticles)
+                                       self.triggerDeathParticles,
+                                       self.addXp)
         
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attackSprites])
@@ -152,14 +156,27 @@ class Level:
     def triggerDeathParticles(self, position, particleType):
         self.animationPlayer.createParticles(particleType, position, [self.visible_sprites])
 
+    def addXp(self, ammount):
+        self.player.exp += ammount
+
+    def toggleMenu(self):
+        self.gamePaused = not self.gamePaused
 
     def run(self):
-        #atualiza e desenha os sprites
         self.visible_sprites.customDraw(self.player)
-        self.visible_sprites.update()
-        self.visible_sprites.enemyUpdate(self.player)
-        self.playerAttackLogic()
         self.ui.display(self.player)
+
+        if self.gamePaused:
+            self.upgrade.display()
+
+
+        else:
+            #atualiza e desenha os sprites
+            self.visible_sprites.update()
+            self.visible_sprites.enemyUpdate(self.player)
+            self.playerAttackLogic()
+
+
 
 
 class YSortCameraGroup(pygame.sprite.Group):

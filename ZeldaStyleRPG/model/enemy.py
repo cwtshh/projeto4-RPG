@@ -5,7 +5,7 @@ from utils.support import importFolder
 
 
 class Enemy(Entity):
-    def __init__(self, monsterName, pos, groups, obstacleSprites, damagePlayer, triggerDeathParticles):
+    def __init__(self, monsterName, pos, groups, obstacleSprites, damagePlayer, triggerDeathParticles, addXp):
 
         # geral
         super().__init__(groups)
@@ -40,6 +40,7 @@ class Enemy(Entity):
         self.attackCooldown = 400
         self.damagePlayer = damagePlayer
         self.triggerDeathParticles = triggerDeathParticles
+        self.addXp = addXp
 
         # timer
         self.vulnerable = True
@@ -147,6 +148,7 @@ class Enemy(Entity):
         if self.health <= 0:
             self.kill()
             self.triggerDeathParticles(self.rect.center, self.mosnterName)
+            self.addXp(self.exp)
 
     def hitReaction(self):
         if not self.vulnerable:

@@ -22,6 +22,10 @@ class Game:
                     pygame.quit()
                     sys.exit()
 
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        self.level.toggleMenu()
+
             #atualiza a tela
             self.screen.fill('black')
             self.clock.tick(fps)

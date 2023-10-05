@@ -9,7 +9,7 @@ class Game:
 
         #configuracoes de tela e FPS
         self.screen = pygame.display.set_mode((width, height))
-        pygame.display.set_caption('RPG zelda')
+        pygame.display.set_caption("Heloísa's Quest: Ecos of Bolo Fofos")
         self.clock = pygame.time.Clock()
 
         self.level = Level()

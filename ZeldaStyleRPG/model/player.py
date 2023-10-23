@@ -10,7 +10,7 @@ class Player(Entity):
 
         # recebe a posicao do tile
         self.rect = self.image.get_rect(topleft = position)
-        self.hitbox = self.rect.inflate(0, -26)
+        self.hitbox = self.rect.inflate(0, HITBOX_OFFSET['player'])
 
         # importa os assets do player
         self.importPlayerAssets()
@@ -52,6 +52,10 @@ class Player(Entity):
         self.vulnerable = True
         self.hurtTime = None
         self.invunerableDuration = 500
+
+        # importa os sons
+        self.weaponAttackSound = pygame.mixer.Sound(r'projeto4-RPG\ZeldaStyleRPG\audio\sword.wav')
+        self.weaponAttackSound.set_volume(0.3)
 
 
     def importPlayerAssets(self):
@@ -108,6 +112,7 @@ class Player(Entity):
                 self.attacking = True
                 self.attackTime = pygame.time.get_ticks()
                 self.createAttack()
+                self.weaponAttackSound.play()
 
             # magia
             if keys[pygame.K_LCTRL]:

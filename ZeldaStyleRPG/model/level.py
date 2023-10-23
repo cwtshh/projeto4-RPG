@@ -192,7 +192,7 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset = pygame.math.Vector2()
 
         # cria o chao
-        self.floorSurface = pygame.image.load(r'projeto4-RPG\ZeldaStyleRPG\graphics\levelGraphics\tilemap\ground.png').convert()
+        self.floorSurface = pygame.image.load(r'ZeldaStyleRPG\graphics\levelGraphics\tilemap\ground.png').convert()
         self.floor_rect = self.floorSurface.get_rect(topleft = (0, 0))
 
     def customDraw(self, player):

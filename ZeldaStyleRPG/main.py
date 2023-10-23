@@ -13,6 +13,12 @@ class Game:
         self.clock = pygame.time.Clock()
 
         self.level = Level()
+        
+        # musica !
+        self.mainSound = pygame.mixer.Sound(r"projeto4-RPG\ZeldaStyleRPG\audio\main.ogg")
+        self.mainSound.play(loops= -1)
+        self.mainSound.set_volume(0.7)
+
 
     def run(self):
         while True:
@@ -34,8 +40,21 @@ class Game:
             self.level.run()
             pygame.display.update()
 
+            if self.level.player.health <= 0:
+                break
+
+        self.screen.fill('black')
+        pygame.display.update()
+
+                
+
+                
+                
+            
+
 
 if __name__ == '__main__':
     game = Game()
     game.run()
+
         

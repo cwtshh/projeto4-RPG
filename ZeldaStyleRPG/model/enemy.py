@@ -47,6 +47,14 @@ class Enemy(Entity):
         self.hitTime = None
         self.invencibilityDuration = 300
 
+        # sons
+        self.deathSound = pygame.mixer.Sound(r'projeto4-RPG\ZeldaStyleRPG\audio\death.wav')
+        self.hit_sound = pygame.mixer.Sound(r'projeto4-RPG\ZeldaStyleRPG\audio\hit.wav')
+        self.deathSound.set_volume(0.2)
+        self.hit_sound.set_volume(0.2)
+        self.attackSound = pygame.mixer.Sound(monsterInfo['attack_sound'])
+        self.attackSound.set_volume(0.3)
+
 
 
     def importGraphics(self, name):
@@ -90,6 +98,7 @@ class Enemy(Entity):
     
     def actions(self, player):
         if self.status == 'attack':
+            self.attackSound.play()
             self.attackTime = pygame.time.get_ticks()
             self.damagePlayer(self.attackDamage, self.attackType)
 
@@ -132,6 +141,7 @@ class Enemy(Entity):
 
     def getDamage(self, player, attackType):
         if self.vulnerable:
+            self.hit_sound.play()
             self.direction = self.getPlayerDistanceDirection(player)[1]
 
             if attackType == 'weapon':
@@ -149,6 +159,7 @@ class Enemy(Entity):
             self.kill()
             self.triggerDeathParticles(self.rect.center, self.mosnterName)
             self.addXp(self.exp)
+            self.deathSound.play()
 
     def hitReaction(self):
         if not self.vulnerable:

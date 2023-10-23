@@ -15,9 +15,9 @@ class Game:
         self.level = Level()
         
         # musica !
-        self.mainSound = pygame.mixer.Sound(r"projeto4-RPG\ZeldaStyleRPG\audio\main.ogg")
-        self.mainSound.play(loops= -1)
-        self.mainSound.set_volume(0.7)
+        """ self.mainSound = pygame.mixer.Sound(r"projeto4-RPG\ZeldaStyleRPG\audio\main.ogg") """
+        """ self.mainSound.play(loops= -1) """
+        """ self.mainSound.set_volume(0.7) """
 
 
     def run(self):
